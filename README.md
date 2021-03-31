@@ -22,32 +22,31 @@ Strava APIs use OAuth 2.0 authentication and support authorisation code and refr
 
 ![Strava app information](images/strava/strava_app_info.png)
 
-You will also see a refresh token on the same page. However, chances are that this token does not have the right permissions to access your activity data. So, we are going to have to obtain a proper refresh token for our use case.
+You will also see a refresh token on the same page. However, chances are this token does not have the right permissions to access your activity data. So, we are going to have to obtain a proper refresh token for our use case.
 
 Strava's authorisation code flow targets regular web and mobile applications. You can build a fully-fledged web application on Quix that utilises authorisation code flow. However, in this example, we are going to build a background service that fetches data from Strava and streams it on Quix without the intervention of a user. Therefore, implementing authorisation code flow on our side just to get one refresh token is a little excessive and we are going to sidestep that issue by manually obtaining the first refresh token using the following procedure.
 
  1. Replace `your_client_id` and `your_redirect_uri` (redirect uri should contain the same domain you used for authorisation callback domain. For instance, if you chose  `portal.platform.quix.ai` as your callback domain, a valid redirect uri would be  `https://portal.platform.quix.ai`) in the following url with the values from the API application we created. `https://www.strava.com/oauth/authorize?client_id=your_client_id&response_type=code&redirect_uri=your_redirect_uri&approval_prompt=force&scope=activity:read`. For our example, we need our access token to have the `activity:read` scope. Visit [Strava Authentication](https://developers.strava.com/docs/authentication/#requestingaccess) to view the list of supported scopes.
- 2. Navigate to the above url using a web browser. You will be redirected to an authorisation page. Ensure that the _View data about your activities_ option is checked and click on the _Authorize_ button. While you are being redirected to your redirect uri, you will see a url like `https://your_auth_callback_domain?state=&code=xxxxx&scope=read,activity:read` on your web browser's address bar. Take note of the value of the `code` query parameter. For some of you, the redirection may happen too quickly to notice the preceding url. If you run into this issue, you can follow the steps below to extract the authorisation code.
-     - Before clicking on the _Authorize_ button, open the developer console of your web browser by pressing the F12 key on your keyboard, and select the "Network" tab (on the off chance F12 does not work for you, right click on the page and click on "Developer tools" > "Inspect" > "Network". If neither option works, you will have to look up documentation for your web browser).
+ 2. Navigate to the above url using a web browser. You will be redirected to an authorisation page. Ensure that the _View data about your activities_ option is checked and click on the _Authorize_ button. While you are being redirected to your redirect uri, you will see a url like `https://your_auth_callback_domain?state=&code=xxxxx&scope=read,activity:read` on your web browser's address bar. Take note of the value of the `code` query parameter. If the redirection happens too quickly for you to catch the url with the code, follow the following steps to extract the authorisation code.
+     - Before clicking on the _Authorize_ button, open the developer console of your web browser by pressing the F12 key on your keyboard and select the "Network" tab (if F12 does not open the developer console, right click on the page and click on "Developer tools" > "Inspect" > "Network". If neither option works, you will have to look up documentation for your web browser).
 
      ![Strava app authorisation](images/strava/strava_app_authorisation.png)
      - If your network tab looks crowded, click on the "clear" button to clean up the console (as shown in step 2 in the screen capture).
-     - Make sure that the _View data about your activities_ option is checked and click on the _Authorize_ button. You will start to see all the outbound requests your web browser is making.
+     - Make sure that the _View data about your activities_ option is checked and click on the _Authorize_ button. A list of entries will appear on your developer console corresponding to the outbound requests your browser is making.
 
      ![Strava network requests](images/strava/strava_network_tab.png)
-     - In the list of requests (somewhere close to the top of the list) you should see an entry with a url that looks like `https://your_auth_callback_domain?state=&code=xxxxx&scope=read,activity:read` as shown in the preceding screen shot. Copy and paste that url to a text editor and you should be able to extract the `code` from that url.
-     
-     ![Terminal emulator](images/strava/strava_curl_response.png).
+     - In this list (somewhere close to the top) you should see an entry with a url that looks like `https://your_auth_callback_domain?state=&code=xxxxx&scope=read,activity:read` as shown in the screen shot. Copy and paste that url to a text editor and you should be able to extract the `code` from that url.
 
  4. With the `code` you obtained in the preceding step, you can now generate a valid refresh token using the following HTTP request:
 
     ```
     curl --location --request POST 'https://www.strava.com/oauth/token?client_id=your_client_id&client_secret=your_client_secret&grant_type=authorization_code&code=your_code'
     ```
-    - Copy and paste the above command to a text editor and replace the values for `your_client_id`, `your_client_secret` and `your_code` with the value you obtained in the preceding steps. We will use `curl` to make the HTTP request since it's available on pretty much every platform out of the box, but there are more modern graphical tools like [Postman](https://www.postman.com/) you can use if you prefer that.
-    - Open a terminal emulator for your platform (MacOS terminal, Windows PowerShell, Linux, well, Linux users know what they are doing) and paste the above command into the terminal and press enter.
- 5. Take note of the `refresh_token` in the response of the above request. For example, if you are using Postman, your request and response would look like
- ![Refresh token from Postman](images/strava/strava_refresh_token_postman.png)
+    - Copy and paste the above command to a text editor and replace the values for `your_client_id`, `your_client_secret` and `your_code` with the values you obtained in the preceding steps. We will use `curl` to make the HTTP request since it's available on pretty much every platform (on the off chance it's not installed on your system, you can download it [here](https://curl.se/download.html)). Alternatively, there are more modern graphical tools like [Postman](https://www.postman.com/) you can use.
+    - Open the terminal emulator for your platform (MacOS terminal, Windows PowerShell, Linux, well, Linux users know what they are doing) and paste the above curl command into the terminal and press enter.
+
+    ![Terminal emulator](images/strava/strava_curl_response.png)
+ 5. Take note of the `refresh_token` in the response of the above request.
 
 By now, you should have a valid client id, client secret and a refresh token for Strava.
 
