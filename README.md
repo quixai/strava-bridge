@@ -70,7 +70,7 @@ Before we can write Strava data to a Quix stream, we need to create a topic to h
 
 ![Quix topics view](images/strava/quix_topics_page.png)
 
-For more information on topics, please visit our [platform documentation](https://documentation-40c5b57b-a938-4925-93a9-25df5a64e54f.platform.quix.ai/topics/).
+For more information on topics, please visit our [platform documentation](https://quix.ai/docs/product/UsingQuix.html#_topics).
 
 ## Create a project
 
@@ -144,10 +144,10 @@ Click on the _Deploy_ button to begin the deployment. Your new deployment will a
 
 ![Deployment progress](images/strava/quix_deploy_progress.png)
 
-If you already have activities on your Strava account, you should be able to view their parameters like altitude, cadence, distance and heart rate using our [Visualize](https://documentation-40c5b57b-a938-4925-93a9-25df5a64e54f.platform.quix.ai/visualise/) feature. Otherwise, take your Strava device out and go get some exercise!
+If you already have activities on your Strava account, you should be able to view their parameters like altitude, cadence, distance and heart rate using our [Visualize](https://quix.ai/docs/product/portal.html#_visualise_2) feature. Otherwise, take your Strava device out and go get some exercise!
 
 ![Quix visualisation](images/strava/quix_visualise.png)
 
 ## Next steps
 
-The motivation behind streaming Strava data on Quix is that you can perform near real-time advanced analytics on your activities rather than leaving them be on Strava. Now that your activities are streaming on Quix, you can create a whole symphony of services using our powerful [SDKs](https://documentation-40c5b57b-a938-4925-93a9-25df5a64e54f.platform.quix.ai/sdk/csharp-how-to/) to read from the topic that contains your raw activity data, analyse them, and write the results to new topics/streams. You can also expose the results of your models through live mobile and web applications powered by Quix!
+The motivation behind streaming Strava data on Quix is that you can perform near real-time advanced analytics on your activities rather than leaving them be on Strava. Now that your activities are streaming on Quix, you can create a whole symphony of services using our powerful [SDKs](https://quix.ai/docs/sdk/introduction.html) to read from the topic that contains your raw activity data, analyse them, and write the results to new topics/streams. You can also expose the results of your models through live mobile and web applications powered by Quix!
